@@ -9,14 +9,14 @@ export class GameOverComponent implements OnInit {
 
   @Input() state: 'won' | 'lost';
 
-  @HostBinding('style.background-image') backgroundImage = 'radial-gradient(yellow, white)';
+  @HostBinding('style.background-image') backgroundImage = 'radial-gradient(#ff4081, white)';
 
   constructor() {
   }
 
   ngOnInit() {
     if (this.state === 'lost') {
-      this.backgroundImage = 'radial-gradient(red, white)';
+      this.backgroundImage = 'radial-gradient(#f44336, white)';
     }
   }
 
