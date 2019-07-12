@@ -1,14 +1,17 @@
-import { Cell } from './cell';
+import {Cell} from './cell';
+import {BehaviorSubject} from 'rxjs';
 
 const PEERS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
 
 export class Board {
   cells: Cell[][] = [];
 
-  private remainingCells = 0;
-  private mineCount = 0;
+  remainingCells = new BehaviorSubject(0);
+  remainingMines = new BehaviorSubject(0);
+  mineCount = new BehaviorSubject(0);
 
   constructor(size: number, mines: number) {
+    this.remainingMines.next(mines);
     for (let y = 0; y < size; y++) {
       this.cells[y] = [];
       for (let x = 0; x < size; x++) {
@@ -38,11 +41,11 @@ export class Board {
         this.cells[y][x].proximityMines = adjacentMines;
 
         if (this.cells[y][x].mine) {
-          this.mineCount++;
+          this.mineCount.next(this.mineCount.getValue() + 1);
         }
       }
     }
-    this.remainingCells = size * size - this.mineCount;
+    this.remainingCells.next(size * size - this.mineCount.getValue());
   }
 
   getRandomCell(): Cell {
@@ -61,8 +64,8 @@ export class Board {
       cell.status = 'clear';
 
       // Empty cell, let's clear the whole block.
-      if(cell.proximityMines === 0) {
-        for(const peer of PEERS) {
+      if (cell.proximityMines === 0) {
+        for (const peer of PEERS) {
           if (
             this.cells[cell.row + peer[0]] &&
             this.cells[cell.row + peer[0]][cell.column + peer[1]]
@@ -72,13 +75,14 @@ export class Board {
         }
       }
 
-
-      if (this.remainingCells-- <= 1) {
+      this.remainingCells.next(this.remainingCells.getValue() - 1);
+      if (this.remainingCells.getValue() <= 1) {
         return 'win';
       }
       return;
     }
   }
+
   revealAll() {
     for (const row of this.cells) {
       for (const cell of row) {

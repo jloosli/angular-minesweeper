@@ -1,0 +1,9 @@
+<form [formGroup]="mineOptions">
+  <mat-form-field>
+    <input matInput placeholder="Size" type="number" formControlName="size" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Mines" type="number" formControlName="mines" />
+  </mat-form-field>
+  <button mat-raised-button [disabled]="this.mineOptions.invalid" (click)="reset()" color="accent">Reset</button>
+</form>

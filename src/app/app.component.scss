@@ -1,10 +1,45 @@
+:host {
+  display: grid;
+  grid-template:
+    " header "
+    " board " 1fr
+    " controls "
+;
+  grid-gap: 0.5rem;
+  height: 100vh;
+}
+
+mat-toolbar {
+  grid-area: header;
+}
+
+.board {
+  grid-area: board;
+  justify-self: center;
+  position: relative;
+  overflow: auto;
+}
+
+app-controls {
+  grid-area: controls;
+}
+
+app-game-over {
+  position: absolute;
+  left: calc(50% - 12.4vh);
+  top: calc(50% - 12.4vh);;
+  z-index: 2;
+
+}
+
 table,
 td {
   border: 1px solid grey;
   border-collapse: collapse;
 }
+
 td {
-  width:32px;
-  height:32px;
+  width: 32px;
+  height: 32px;
   text-align: center;
 }
